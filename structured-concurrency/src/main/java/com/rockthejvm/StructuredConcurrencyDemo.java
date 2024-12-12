@@ -6,6 +6,7 @@ import com.rockthejvm.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -31,7 +32,16 @@ public class StructuredConcurrencyDemo {
         LOGGER.info("GitHub repos for user {}: {}", userId, repos);
     }
 
+    static void demoTimeout() throws ExecutionException, InterruptedException {
+        final GitHubRepository gitHubRepository = new GitHubRepository(); // "old" API
+        final FindRepositoriesByUserIdWithTimeout findRepositoriesByUserIdWithTimeout = new FindRepositoriesByUserIdWithTimeout(gitHubRepository);
+
+        final UserId userId = new UserId(1L);
+        final List<Repository> repos = findRepositoriesByUserIdWithTimeout.findRepositories(userId, Duration.ofMillis(200));
+        LOGGER.info("GitHub repos for user {}: {}", userId, repos);
+    }
+
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        demoSuccessClosure();
+        demoTimeout();
     }
 }
