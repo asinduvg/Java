@@ -45,7 +45,15 @@ public class FindGitHubUserConcurrentService implements FindGitHubUserService {
             var repositories = scope.fork(() -> findRepositoriesByUserIdPort.findRepositories(userId));
 
             // semantic blocking - mandatory before exiting the try resources
-            scope.join();
+            scope.join().throwIfFailed(); // throws the original exception
+//            scope.join().throwIfFailed( //  process the exception and throw the resulting exception
+//                    t -> {
+//                        if (t instanceof Exception) {
+//                            LOGGER.error("Exception here");
+//                            return t;
+//                        } else throw (Error) t;
+//                    }
+//            );
             LOGGER.info("Both forked tasks completed");
             return new GitHubUser(user.get(), repositories.get());
         }
