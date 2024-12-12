@@ -17,6 +17,7 @@ public class GitHubRepository implements FindUserByIdPort, FindRepositoriesByUse
     public List<Repository> findRepositories(UserId userId) throws InterruptedException, ExecutionException {
         LOGGER.info("Finding repositories for user with id '{}'", userId);
         delay(Duration.ofSeconds(1L));
+//        throw new RuntimeException("web socket error");
         LOGGER.info("Repositories found for user '{}'", userId);
         return List.of(new Repository("raise4s", Visibility.PUBLIC, URI.create("https://github.com/rcardin/raise4s")), new Repository("sus4s", Visibility.PUBLIC, URI.create("https://github.com/rcardin/sus4s")));
     }
